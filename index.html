@@ -3,252 +3,272 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ALINE ARCANJO // 27</title>
+    <title>Aline Arcanjo | 27</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap');
 
-        :root {
-            --pink: #ff007f;
-            --dark: #050506;
-        }
-
-        /* touch-action: none evita conflitos de scroll no mobile */
-        * { 
-            margin: 0; padding: 0; box-sizing: border-box; 
-            font-family: 'JetBrains Mono', monospace; 
-            touch-action: none; 
-        }
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
 
         body {
-            background-color: var(--dark);
+            margin: 0;
             height: 100vh;
-            width: 100vw;
-            overflow: hidden;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            background: #000 url('fundo2.jpg') no-repeat center center;
+            background-size: contain;
+            font-family: 'Montserrat', sans-serif;
             perspective: 2000px;
+            overflow: hidden;
+            transition: background-image 0.4s ease-in-out;
         }
 
-        #canvas-mesh {
+        body::before {
+            content: '';
             position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 1;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            z-index: 0;
         }
 
-        .scene {
-            width: 90%;
-            max-width: 340px;
-            height: 500px;
-            z-index: 10;
-            cursor: pointer;
-            touch-action: auto; 
-        }
-
-        .card-inner {
+        .card-container {
+            width: 88vw;
+            max-width: 350px;
+            height: 75vh;
+            max-height: 580px;
             position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
             transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
         }
 
-        .card-inner.is-flipped { transform: rotateY(180deg); }
+        .is-flipped { transform: rotateY(180deg); }
 
         .card-face {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
+            border-radius: 25px;
+            border: 2px solid rgba(212, 175, 55, 0.8);
             display: flex;
             flex-direction: column;
-            justify-content: center; 
-            align-items: center;    
-            padding: 35px;
-            border-radius: 4px;
-            background: rgba(8, 8, 10, 0.96);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 0, 127, 0.4);
-            box-shadow: 0 0 40px rgba(255, 0, 127, 0.15);
+            background: transparent;
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+            overflow: hidden;
         }
 
-        .face-back { transform: rotateY(180deg); }
+        .card-front {
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
 
-        .sys-label { font-size: 0.6rem; color: var(--pink); letter-spacing: 3px; margin-bottom: 20px; text-transform: uppercase; }
-        h1 { font-size: 2.6rem; font-weight: 700; color: #fff; line-height: 1; }
-        .surname { font-size: 1.4rem; font-weight: 300; color: #fff; opacity: 0.8; letter-spacing: 4px; margin-bottom: 20px; }
-        .age { font-size: 5.5rem; font-weight: 700; color: var(--pink); text-shadow: 0 0 25px var(--pink); margin-bottom: 30px; }
+        .nome-container {
+            width: 100%;
+            padding: 30px 10px;
+            border: 3px solid #d4af37;
+            border-radius: 20px;
+            background: rgba(0,0,0,0.4);
+        }
 
-        .details-box {
+        .nome-container h1 { font-size: 26px; font-weight: 900; color: #fff; margin: 0; letter-spacing: 2px; text-transform: uppercase; }
+        .nome-container p { font-weight: 700; font-size: 18px; color: #d4af37; margin: 8px 0 0; letter-spacing: 4px; }
+
+        .progress-wrapper { width: 100%; margin-top: 50px; padding: 0 20px; }
+        
+        .progress-text {
+            font-size: 8px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px #000;
+            min-height: 24px;
+        }
+
+        .progress-bar-bg { width: 100%; height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #d4af37; width: 0%; transition: width 1.5s ease-out; box-shadow: 0 0 15px rgba(212, 175, 55, 0.6); }
+
+        .tap-hint { margin-top: 50px; font-size: 9px; color: #d4af37; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
+
+        .card-back { transform: rotateY(180deg); padding: 35px 20px 0; color: #fff; }
+
+        .girls-only {
+            font-size: 28px;
+            font-weight: 900;
+            color: #d4af37;
+            text-align: center;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 10px rgba(0,0,0,1);
+        }
+
+        .info-title { font-size: 10px; font-weight: 700; color: #d4af37; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .info-content { font-size: 18px; font-weight: 700; margin-bottom: 25px; text-shadow: 2px 2px 4px #000; }
+
+        /* ÁREA DE BOTÕES - ONDE A MÁGICA ACONTECE */
+        .confirm-area {
+            margin-top: auto;
+            background: rgba(0,0,0,0.8);
+            padding: 20px;
+            border-radius: 0 0 23px 23px;
             width: 100%;
             display: flex;
-            justify-content: space-around;
-            border-top: 1px solid rgba(255, 0, 127, 0.3);
-            padding-top: 25px;
-            margin-bottom: 20px;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .d-item .l { font-size: 0.55rem; color: var(--pink); display: block; margin-bottom: 5px; }
-        .d-item .v { font-size: 1rem; font-weight: bold; color: #fff; }
-
-        .btn-confirm {
-            background: var(--pink);
-            color: #fff;
-            border: none;
-            padding: 18px;
+        input {
             width: 100%;
-            font-weight: bold;
-            letter-spacing: 2px;
-            cursor: pointer;
-            margin-top: 20px;
-            text-transform: uppercase;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #d4af37;
+            color: #fff;
+            padding: 10px 0;
+            margin-bottom: 20px;
+            outline: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            text-align: center;
         }
 
-        .c { position: absolute; width: 15px; height: 15px; border: 2px solid var(--pink); }
-        .tl { top: -2px; left: -2px; border-right: none; border-bottom: none; }
-        .br { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+        .btn-group {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
+        }
 
-        #modal { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:100; display:none; align-items:center; justify-content:center; touch-action: auto; }
-        .m-box { width: 85%; max-width: 300px; text-align: center; }
-        input { background: transparent; border: none; border-bottom: 2px solid var(--pink); color: #fff; width: 100%; padding: 15px; margin-bottom: 25px; font-size: 1.2rem; outline: none; text-align: center; }
+        .btn {
+            width: 100%;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #btn-sim { background: #d4af37; color: #000; padding: 16px; font-size: 14px; z-index: 2; }
+        #btn-nao { background: #333; color: #fff; padding: 10px; font-size: 12px; opacity: 0.7; }
     </style>
 </head>
 <body>
 
-<canvas id="canvas-mesh"></canvas>
-
-<div class="scene">
-    <div class="card-inner" id="card">
-        <div class="card-face face-front">
-            <div class="c tl"></div><div class="c br"></div>
-            <p class="sys-label">Protocolo_Ativo</p>
-            <h1>ALINE</h1>
-            <p class="surname">ARCANJO</p>
-            <p class="age">27</p>
-            <div class="details-box">
-                <div class="d-item"><span class="l">> DATA</span><span class="v">23.MAI</span></div>
-                <div class="d-item"><span class="l">> HORA</span><span class="v">10:00H</span></div>
+    <div class="card-container" id="card">
+        <div class="card-face card-front">
+            <div class="nome-container">
+                <h1>ALINE ARCANJO</h1>
+                <p>27 ANOS</p>
             </div>
-            <p style="font-size: 0.5rem; color: var(--pink); opacity: 0.6;">CLIQUE PARA DETALHES</p>
+            <div class="progress-wrapper">
+                <span class="progress-text" id="prog-txt">DEPLOYING ALINE...</span>
+                <div class="progress-bar-bg">
+                    <div class="progress-fill" id="prog-bar"></div>
+                </div>
+            </div>
+            <div class="tap-hint">Toque para mais informações</div>
         </div>
 
-        <div class="card-face face-back">
-            <div class="c tl"></div><div class="c br"></div>
-            <p class="sys-label">Acesso_Liberado</p>
-            <p style="color:#fff; text-align:center; line-height:1.6; font-size: 1.1rem;">
-                O <span style="color:var(--pink); font-weight: bold;">aniversário</span> será em uma roça a <span style="color:var(--pink); font-weight: bold;">12km</span>.<br><br>
-                Leve seu <span style="color:var(--pink); font-weight: bold;">traje de banho</span>!
-            </p>
-            <button class="btn-confirm" onclick="event.stopPropagation(); openModal();">Confirmar</button>
+        <div class="card-face card-back">
+            <div class="girls-only">SÓ PARA MENINAS</div>
+            <span class="info-title">📅 DATA</span>
+            <div class="info-content">Dia 23, Sábado, Maio</div>
+            <span class="info-title">📍 LOCAL & HORA</span>
+            <div class="info-content">Na Roça (12km) | 09h às 18h</div>
+            <span class="info-title">👙 TRAJE</span>
+            <div class="info-content">Traga seu traje de banho.</div>
+
+            <div class="confirm-area">
+                <input type="text" id="guest" placeholder="SEU NOME">
+                <div class="btn-group">
+                    <button class="btn" id="btn-sim" onclick="confirmar()">VOU COM CERTEZA</button>
+                    <button class="btn" id="btn-nao" onclick="rejeitar(event)">Não poderei ir</button>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="modal">
-    <div class="m-box">
-        <p style="color: var(--pink); font-size: 0.7rem; margin-bottom: 10px;">SEU NOME:</p>
-        <input type="text" id="guest" placeholder="..." autocomplete="off">
-        <button class="btn-confirm" onclick="enviar()">Enviar</button>
-    </div>
-</div>
+    <script>
+        const card = document.getElementById('card');
+        const btnSim = document.getElementById('btn-sim');
+        const btnNao = document.getElementById('btn-nao');
+        const progTxt = document.getElementById('prog-txt');
+        
+        let escalaSim = 1;
+        let escalaNao = 1;
+        let i = 0;
 
-<script>
-    const canvas = document.getElementById('canvas-mesh');
-    const ctx = canvas.getContext('2d');
-    let points = [];
-    const mouse = { x: -1000, y: -1000, radius: 120 };
+        const statusFrases = [
+            "Deploying 27 Years of Aline...",
+            "Sincronizando com o Sol da Roça...",
+            "Status: Preparando o Tanque...",
+            "Nível de Farra: Carregando...",
+            "Iniciando Módulo Sertão Premium...",
+            "Conectando ao modo Pagodinho...",
+            "Churrasco: 99% Concluído...",
+            "Analisando Lote (12km adiante)...",
+            "Ajustando Traje de Banho...",
+            "Configurando Modo Só Meninas...",
+            "Verificando estoque de alegria...",
+            "Aline v27.0: Carregando Assets...",
+            "Protocolo Sábado: Iniciado...",
+            "Gerando convites dinâmicos...",
+            "Otimizando vibe sertaneja...",
+            "Processando 23 de Maio...",
+            "Finalizando Deploy: Quase lá!",
+            "Tudo pronto. Só falta você!"
+        ];
 
-    function init() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        points = [];
-        // Otimizado para rodar a 60fps no mobile
-        const count = window.innerWidth < 600 ? 50 : 80;
-        for (let i = 0; i < count; i++) {
-            points.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                origX: Math.random() * canvas.width,
-                origY: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 0.4,
-                vy: (Math.random() - 0.5) * 0.4
-            });
+        const imagens = [];
+        for (let n = 2; n <= 19; n++) {
+            let ext = (n === 8) ? '.png' : '.jpg';
+            imagens.push(`fundo${n}${ext}`);
         }
-    }
 
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.strokeStyle = "rgba(255, 0, 127, 0.12)";
-        ctx.fillStyle = "rgba(255, 0, 127, 0.4)";
-
-        points.forEach((p, i) => {
-            p.origX += p.vx;
-            p.origY += p.vy;
-            if(p.origX < 0 || p.origX > canvas.width) p.vx *= -1;
-            if(p.origY < 0 || p.origY > canvas.height) p.vy *= -1;
-
-            let dx = mouse.x - p.x;
-            let dy = mouse.y - p.y;
-            let dist = Math.sqrt(dx*dx + dy*dy);
-            
-            if (dist < mouse.radius) {
-                let force = (mouse.radius - dist) / mouse.radius;
-                p.x -= dx * force * 0.2;
-                p.y -= dy * force * 0.2;
-            } else {
-                p.x += (p.origX - p.x) * 0.05;
-                p.y += (p.origY - p.y) * 0.05;
+        // LÓGICA DO BOTÃO QUE FOGE
+        function rejeitar(e) {
+            e.stopPropagation();
+            escalaSim += 0.3;
+            escalaNao -= 0.2;
+            btnSim.style.transform = `scale(${escalaSim})`;
+            btnNao.style.transform = `scale(${escalaNao})`;
+            btnNao.style.opacity = escalaNao;
+            if (escalaNao <= 0.2) {
+                btnNao.style.display = 'none';
+                btnSim.style.width = '100%';
+                btnSim.innerText = "VOCÊ VAI SIM! CONFIRMA AGORA";
             }
+        }
 
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, 1.2, 0, Math.PI*2);
-            ctx.fill();
-
-            for (let j = i + 1; j < points.length; j++) {
-                let dx2 = p.x - points[j].x;
-                let dy2 = p.y - points[j].y;
-                let d2 = Math.sqrt(dx2*dx2 + dy2*dy2);
-                if (d2 < 100) {
-                    ctx.beginPath();
-                    ctx.moveTo(p.x, p.y);
-                    ctx.lineTo(points[j].x, points[j].y);
-                    ctx.stroke();
-                }
-            }
+        card.addEventListener('click', function(e) {
+            if (e.target.tagName === 'INPUT' || e.target.classList.contains('btn')) return;
+            this.classList.toggle('is-flipped');
+            i = (i + 1) % imagens.length;
+            document.body.style.backgroundImage = `url('${imagens[i]}')`;
+            progTxt.innerText = statusFrases[i] || "DEPLOYING ALINE...";
         });
-        requestAnimationFrame(animate);
-    }
 
-    const handleMove = (e) => {
-        const pos = e.touches ? e.touches[0] : e;
-        mouse.x = pos.clientX;
-        mouse.y = pos.clientY;
-    };
+        function confirmar() {
+            const nome = document.getElementById('guest').value;
+            if(!nome) return alert("Por favor, digite seu nome!");
+            window.open(`https://api.whatsapp.com/send?phone=5574988017089&text=${encodeURIComponent(nome.toUpperCase() + " CONFIRMADA!")}`);
+        }
 
-    window.addEventListener('mousemove', handleMove);
-    window.addEventListener('touchmove', handleMove, { passive: false });
-    window.addEventListener('resize', init);
-    
-    init(); animate();
-
-    const card = document.getElementById('card');
-    card.addEventListener('click', () => {
-        card.classList.toggle('is-flipped');
-        if(navigator.vibrate) navigator.vibrate(25);
-    });
-
-    function openModal() { document.getElementById('modal').style.display = 'flex'; }
-    
-    function enviar() {
-        const n = document.getElementById('guest').value.trim();
-        if(!n) return;
-        // Mensagem limpa e direta como solicitado
-        const msg = encodeURIComponent(`Presença confirmada — ${n}`);
-        window.location.href = `https://wa.me/5574988017089?text=${msg}`;
-    }
-</script>
+        window.onload = () => {
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 4, 1); 
+            const target = new Date(now.getFullYear(), 4, 23); 
+            let percent = Math.min(Math.max(((now - start) / (target - start)) * 100, 5), 100);
+            document.getElementById('prog-bar').style.width = percent + '%';
+            progTxt.innerText = statusFrases[0];
+        };
+    </script>
 </body>
 </html>
