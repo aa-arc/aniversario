@@ -15,7 +15,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #000 url('fundo2.jpg') no-repeat center center;
+            background-color: #000; /* Fundo de segurança */
+            background-image: url('fundo2.jpg');
+            background-repeat: no-repeat;
+            background-position: center center;
             background-size: contain;
             font-family: 'Montserrat', sans-serif;
             perspective: 2000px;
@@ -110,7 +113,6 @@
         .info-title { font-size: 10px; font-weight: 700; color: #d4af37; text-transform: uppercase; margin-bottom: 5px; display: block; }
         .info-content { font-size: 18px; font-weight: 700; margin-bottom: 25px; text-shadow: 2px 2px 4px #000; }
 
-        /* ÁREA DE BOTÕES - ONDE A MÁGICA ACONTECE */
         .confirm-area {
             margin-top: auto;
             background: rgba(0,0,0,0.8);
@@ -232,11 +234,9 @@
             imagens.push(`fundo${n}${ext}`);
         }
 
-        // LÓGICA DO BOTÃO QUE FOGE
         function rejeitar(e) {
             e.stopPropagation();
-            escalaSim += 0.3;
-            escalaNao -= 0.2;
+            escalaSim += 0.3; escalaNao -= 0.2;
             btnSim.style.transform = `scale(${escalaSim})`;
             btnNao.style.transform = `scale(${escalaNao})`;
             btnNao.style.opacity = escalaNao;
@@ -251,7 +251,14 @@
             if (e.target.tagName === 'INPUT' || e.target.classList.contains('btn')) return;
             this.classList.toggle('is-flipped');
             i = (i + 1) % imagens.length;
-            document.body.style.backgroundImage = `url('${imagens[i]}')`;
+            
+            // Pré-carregamento para evitar tela preta
+            const imgPreload = new Image();
+            imgPreload.src = imagens[i];
+            imgPreload.onload = () => {
+                document.body.style.backgroundImage = `url('${imagens[i]}')`;
+            };
+            
             progTxt.innerText = statusFrases[i] || "DEPLOYING ALINE...";
         });
 
