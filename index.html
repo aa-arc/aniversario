@@ -19,44 +19,36 @@
             font-family: 'Montserrat', sans-serif;
             overflow: hidden;
             position: relative;
+            perspective: 2000px;
         }
 
-        /* CAMADA 1: FUNDO DESFOCADO (PARA PREENCHER O CELULAR) */
+        /* SISTEMA DE FUNDO FLUIDO */
         .bg-blurred {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('f1.jpg');
+            background-image: url('f1.jpg'); 
             background-repeat: no-repeat;
             background-position: center center;
-            background-size: cover; /* Esse sim estica para preencher */
-            filter: blur(20px) brightness(0.5); /* Desfoca e escurece */
-            transform: scale(1.1); /* Evita bordas brancas no blur */
+            background-size: cover; 
+            filter: blur(20px) brightness(0.6);
+            transform: scale(1.1);
             z-index: 0;
             transition: background-image 0.4s ease-in-out;
         }
 
-        /* CAMADA 2: FOTO REAL (NITIDA E SEM ZOOM) */
         .bg-sharp {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             background-image: url('f1.jpg');
             background-repeat: no-repeat;
             background-position: center center;
-            /* A MÁGICA: CONTAIN MOSTRA A FOTO INTEIRA SEM CORTAR */
             background-size: contain; 
             image-rendering: -webkit-optimize-contrast;
             z-index: 1;
             transition: background-image 0.4s ease-in-out;
         }
 
-        /* Overlay sutil sobre a foto nítida */
-        .bg-sharp::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.1);
-        }
-
+        /* CONTAINER DO CARD COM GIRO */
         .card-container {
             width: 88vw;
             max-width: 350px;
@@ -64,37 +56,65 @@
             max-height: 600px;
             position: relative;
             z-index: 10;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
         }
 
+        .is-flipped { transform: rotateY(180deg); }
+
         .card-face {
+            position: absolute;
             width: 100%; height: 100%;
+            backface-visibility: hidden;
             border-radius: 25px;
             border: 2px solid rgba(212, 175, 55, 0.9);
             display: flex;
             flex-direction: column;
-            /* 100% TRANSPARENTE */
             background: transparent;
+            overflow: hidden;
+        }
+
+        /* FRENTE DO CARD (A CAPA) */
+        .card-front {
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .nome-container {
+            width: 100%;
+            padding: 30px 10px;
+            border: 3px solid #d4af37;
+            border-radius: 20px;
+            background: rgba(0,0,0,0.4);
+        }
+
+        .nome-container h1 { font-size: 26px; font-weight: 900; color: #fff; margin: 0; letter-spacing: 2px; text-transform: uppercase; }
+        .nome-container p { font-weight: 700; font-size: 18px; color: #d4af37; margin: 8px 0 0; letter-spacing: 4px; }
+
+        .progress-wrapper { width: 100%; margin-top: 50px; padding: 0 20px; }
+        .progress-text { font-size: 8px; color: #fff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; font-weight: 700; text-shadow: 1px 1px 2px #000; min-height: 24px; }
+        .progress-bar-bg { width: 100%; height: 6px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #d4af37; width: 0%; transition: width 1.5s ease-out; box-shadow: 0 0 15px rgba(212, 175, 55, 0.6); }
+
+        .tap-hint { margin-top: 50px; font-size: 9px; color: #d4af37; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* VERSO DO CARD (INFORMAÇÕES) */
+        .card-back {
+            transform: rotateY(180deg);
             padding: 35px 20px 0;
             color: #fff;
         }
 
-        .girls-only { 
-            font-size: 28px; 
-            font-weight: 900; 
-            color: #d4af37; 
-            text-align: center; 
-            margin-bottom: 30px; 
-            text-transform: uppercase; 
-            text-shadow: 2px 2px 10px #000; 
-        }
-        
+        .girls-only { font-size: 28px; font-weight: 900; color: #d4af37; text-align: center; margin-bottom: 30px; text-transform: uppercase; text-shadow: 2px 2px 10px #000; }
         .info-title { font-size: 10px; font-weight: 700; color: #d4af37; text-transform: uppercase; margin-bottom: 5px; display: block; }
-        .info-content { font-size: 18px; font-weight: 700; margin-bottom: 25px; text-shadow: 2px 2px 5px #000; }
+        .info-content { font-size: 18px; font-weight: 700; margin-bottom: 25px; text-shadow: 2px 2px 4px #000; }
 
         .confirm-area {
             margin-top: auto;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             padding: 20px;
             border-radius: 0 0 23px 23px;
             width: 100%;
@@ -118,31 +138,11 @@
         }
 
         .btn-group { width: 100%; display: flex; flex-direction: column; gap: 10px; align-items: center; }
-        .btn { 
-            width: 100%; 
-            border: none; 
-            border-radius: 10px; 
-            font-family: 'Montserrat', sans-serif; 
-            font-weight: 900; 
-            text-transform: uppercase; 
-            cursor: pointer; 
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        }
+        .btn { width: 100%; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         
         #btn-sim { background: #d4af37; color: #000; padding: 15px; font-size: 14px; z-index: 2; }
-        #btn-nao { background: #222; color: #fff; padding: 10px; font-size: 11px; opacity: 0.7; }
-        
-        #btn-spotify { 
-            background: #1DB954; 
-            color: #fff; 
-            padding: 10px; 
-            font-size: 10px; 
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
+        #btn-nao { background: #333; color: #fff; padding: 10px; font-size: 11px; opacity: 0.7; }
+        #btn-spotify { background: #1DB954; color: #fff; padding: 10px; font-size: 10px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 8px; }
     </style>
 </head>
 <body>
@@ -151,15 +151,26 @@
     <div class="bg-sharp" id="bg-sharp"></div>
 
     <div class="card-container" id="card">
-        <div class="card-face">
+        <div class="card-face card-front">
+            <div class="nome-container">
+                <h1>ALINE ARCANJO</h1>
+                <p>27 ANOS</p>
+            </div>
+            <div class="progress-wrapper">
+                <span class="progress-text" id="prog-txt">DEPLOYING ALINE...</span>
+                <div class="progress-bar-bg">
+                    <div class="progress-fill" id="prog-bar"></div>
+                </div>
+            </div>
+            <div class="tap-hint">Toque para mais informações</div>
+        </div>
+
+        <div class="card-face card-back">
             <div class="girls-only">SÓ PARA MENINAS</div>
-            
             <span class="info-title">📅 DATA</span>
             <div class="info-content">Dia 23, Sábado, Maio</div>
-
             <span class="info-title">📍 LOCAL & HORA</span>
             <div class="info-content">Na Roça (12km) | 09h às 18h</div>
-
             <span class="info-title">👙 TRAJE</span>
             <div class="info-content">Traga seu traje de banho.</div>
 
@@ -183,8 +194,8 @@
         const btnNao = document.getElementById('btn-nao');
         const bgBlur = document.getElementById('bg-blur');
         const bgSharp = document.getElementById('bg-sharp');
-        
-        // Mapeamento dos arquivos reais na sua pasta
+        const progBar = document.getElementById('prog-bar');
+
         const imagens = [
             'f1.jpg', 'f2.jpg', 'f3.jpg', 'f4.jpg', 'f5.jpg', 'f6.jpg', 'f7.jpg', 
             'f8.jpg', 'f9.jpg', 'f10.jpg', 'f11.jpg', 'f12.jpg', 'f13.jpg', 
@@ -195,19 +206,17 @@
         let escalaSim = 1;
         let escalaNao = 1;
 
-        // Troca de imagem sincronizada nas duas camadas (nítida e desfocada)
         card.addEventListener('click', function(e) {
             if (e.target.tagName === 'INPUT' || e.target.classList.contains('btn')) return;
             
+            this.classList.toggle('is-flipped');
+            
             i = (i + 1) % imagens.length;
             const novaImg = `url('${imagens[i]}')`;
-            
-            // Atualiza as duas camadas ao mesmo tempo
             bgBlur.style.backgroundImage = novaImg;
             bgSharp.style.backgroundImage = novaImg;
         });
 
-        // Lógica do botão fujão
         function rejeitar(e) {
             e.stopPropagation();
             escalaSim += 0.3; escalaNao -= 0.2;
@@ -228,6 +237,14 @@
             const text = encodeURIComponent(nome.toUpperCase() + " CONFIRMADA! JÁ ADICIONEI MINHAS MÚSICAS.");
             window.open(`https://api.whatsapp.com/send?phone=${phone}&text=${text}`);
         }
+
+        window.onload = () => {
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 4, 1); 
+            const target = new Date(now.getFullYear(), 4, 23); 
+            let percent = Math.min(Math.max(((now - start) / (target - start)) * 100, 5), 100);
+            progBar.style.width = percent + '%';
+        };
     </script>
 </body>
 </html>
