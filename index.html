@@ -22,7 +22,7 @@
             perspective: 2000px;
         }
 
-        /* SISTEMA DE FUNDO FLUIDO */
+        /* FUNDO COM MOLDURA DESFOCADA (f1.jpg fixa) */
         .bg-blurred {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -33,7 +33,6 @@
             filter: blur(20px) brightness(0.6);
             transform: scale(1.1);
             z-index: 0;
-            transition: background-image 0.4s ease-in-out;
         }
 
         .bg-sharp {
@@ -45,10 +44,9 @@
             background-size: contain; 
             image-rendering: -webkit-optimize-contrast;
             z-index: 1;
-            transition: background-image 0.4s ease-in-out;
         }
 
-        /* CONTAINER DO CARD COM GIRO */
+        /* MECÂNICA DO CARD */
         .card-container {
             width: 88vw;
             max-width: 350px;
@@ -75,7 +73,7 @@
             overflow: hidden;
         }
 
-        /* FRENTE DO CARD (A CAPA) */
+        /* FRENTE: CAPA */
         .card-front {
             justify-content: center;
             align-items: center;
@@ -88,7 +86,7 @@
             padding: 30px 10px;
             border: 3px solid #d4af37;
             border-radius: 20px;
-            background: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.5);
         }
 
         .nome-container h1 { font-size: 26px; font-weight: 900; color: #fff; margin: 0; letter-spacing: 2px; text-transform: uppercase; }
@@ -101,7 +99,7 @@
 
         .tap-hint { margin-top: 50px; font-size: 9px; color: #d4af37; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
 
-        /* VERSO DO CARD (INFORMAÇÕES) */
+        /* VERSO: INFO */
         .card-back {
             transform: rotateY(180deg);
             padding: 35px 20px 0;
@@ -130,7 +128,7 @@
             border-bottom: 2px solid #d4af37;
             color: #fff;
             padding: 10px 0;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             outline: none;
             font-family: 'Montserrat', sans-serif;
             font-size: 16px;
@@ -147,8 +145,8 @@
 </head>
 <body>
 
-    <div class="bg-blurred" id="bg-blur"></div>
-    <div class="bg-sharp" id="bg-sharp"></div>
+    <div class="bg-blurred"></div>
+    <div class="bg-sharp"></div>
 
     <div class="card-container" id="card">
         <div class="card-face card-front">
@@ -162,7 +160,7 @@
                     <div class="progress-fill" id="prog-bar"></div>
                 </div>
             </div>
-            <div class="tap-hint">Toque para mais informações</div>
+            <div class="tap-hint">Toque para ver os detalhes</div>
         </div>
 
         <div class="card-face card-back">
@@ -192,29 +190,15 @@
         const card = document.getElementById('card');
         const btnSim = document.getElementById('btn-sim');
         const btnNao = document.getElementById('btn-nao');
-        const bgBlur = document.getElementById('bg-blur');
-        const bgSharp = document.getElementById('bg-sharp');
-        const progBar = document.getElementById('prog-bar');
+        const progFill = document.getElementById('prog-bar');
 
-        const imagens = [
-            'f1.jpg', 'f2.jpg', 'f3.jpg', 'f4.jpg', 'f5.jpg', 'f6.jpg', 'f7.jpg', 
-            'f8.jpg', 'f9.jpg', 'f10.jpg', 'f11.jpg', 'f12.jpg', 'f13.jpg', 
-            'f14.jpg', 'f15.jpg', 'f16.jpg', 'dsd.jpg', 'pet.jpg', '274.jpg', 'fri.jpg'
-        ];
-        
-        let i = 0;
         let escalaSim = 1;
         let escalaNao = 1;
 
+        // GIRO MANUAL
         card.addEventListener('click', function(e) {
             if (e.target.tagName === 'INPUT' || e.target.classList.contains('btn')) return;
-            
             this.classList.toggle('is-flipped');
-            
-            i = (i + 1) % imagens.length;
-            const novaImg = `url('${imagens[i]}')`;
-            bgBlur.style.backgroundImage = novaImg;
-            bgSharp.style.backgroundImage = novaImg;
         });
 
         function rejeitar(e) {
@@ -239,11 +223,14 @@
         }
 
         window.onload = () => {
+            // GARANTE QUE O CARD COMECE NA FRENTE
+            card.classList.remove('is-flipped');
+            
             const now = new Date();
             const start = new Date(now.getFullYear(), 4, 1); 
             const target = new Date(now.getFullYear(), 4, 23); 
             let percent = Math.min(Math.max(((now - start) / (target - start)) * 100, 5), 100);
-            progBar.style.width = percent + '%';
+            progFill.style.width = percent + '%';
         };
     </script>
 </body>
