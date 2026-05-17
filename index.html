@@ -22,33 +22,29 @@
             perspective: 2000px;
         }
 
-        /* SISTEMA DE FUNDO DINÂMICO COM BLUR */
         .bg-blurred {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('f1.jpg'); 
+            background-image: url('f11.jpg'); 
             background-repeat: no-repeat;
             background-position: center center;
             background-size: cover; 
             filter: blur(20px) brightness(0.6);
             transform: scale(1.1);
             z-index: 0;
-            transition: background-image 0.4s ease-in-out;
         }
 
         .bg-sharp {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-image: url('f1.jpg');
+            background-image: url('f11.jpg');
             background-repeat: no-repeat;
             background-position: center center;
             background-size: contain; 
             image-rendering: -webkit-optimize-contrast;
             z-index: 1;
-            transition: background-image 0.4s ease-in-out;
         }
 
-        /* MECÂNICA DO CARD */
         .card-container {
             width: 88vw;
             max-width: 350px;
@@ -75,7 +71,6 @@
             overflow: hidden;
         }
 
-        /* FRENTE: CAPA */
         .card-front {
             justify-content: center;
             align-items: center;
@@ -101,21 +96,19 @@
 
         .tap-hint { margin-top: 50px; font-size: 9px; color: #d4af37; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
 
-        /* VERSO: INFO */
         .card-back {
             transform: rotateY(180deg);
-            padding: 35px 20px 0;
+            padding: 25px 20px 0;
             color: #fff;
         }
 
-        .girls-only { font-size: 28px; font-weight: 900; color: #d4af37; text-align: center; margin-bottom: 30px; text-transform: uppercase; text-shadow: 2px 2px 10px #000; }
         .info-title { font-size: 10px; font-weight: 700; color: #d4af37; text-transform: uppercase; margin-bottom: 5px; display: block; }
-        .info-content { font-size: 18px; font-weight: 700; margin-bottom: 25px; text-shadow: 2px 2px 4px #000; }
+        .info-content { font-size: 18px; font-weight: 700; margin-bottom: 20px; text-shadow: 2px 2px 4px #000; }
 
         .confirm-area {
             margin-top: auto;
             background: rgba(0,0,0,0.85);
-            padding: 20px;
+            padding: 15px 20px 20px;
             border-radius: 0 0 23px 23px;
             width: 100%;
             display: flex;
@@ -137,12 +130,14 @@
             text-align: center;
         }
 
-        .btn-group { width: 100%; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+        .btn-group { width: 100%; display: flex; flex-direction: column; gap: 8px; align-items: center; }
         .btn { width: 100%; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         
-        #btn-sim { background: #d4af37; color: #000; padding: 15px; font-size: 14px; z-index: 2; }
+        #btn-sim { background: #d4af37; color: #000; padding: 14px; font-size: 13px; z-index: 2; }
         #btn-nao { background: #333; color: #fff; padding: 10px; font-size: 11px; opacity: 0.7; }
-        #btn-spotify { background: #1DB954; color: #fff; padding: 10px; font-size: 10px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        #btn-spotify { background: #1DB954; color: #fff; padding: 10px; font-size: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        #btn-gps { background: #4285F4; color: #fff; padding: 10px; font-size: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        #btn-fotos-local { background: #8E44AD; color: #fff; padding: 10px; font-size: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
     </style>
 </head>
 <body>
@@ -162,21 +157,28 @@
                     <div class="progress-fill" id="prog-bar"></div>
                 </div>
             </div>
-            <div class="tap-hint">Toque para ver os detalhes e fotos</div>
+            <div class="tap-hint">Toque para ver os detalhes</div>
         </div>
 
         <div class="card-face card-back">
-            <div class="girls-only">SÓ PARA MENINAS</div>
             <span class="info-title">📅 DATA</span>
             <div class="info-content">Dia 23, Sábado, Maio</div>
             <span class="info-title">📍 LOCAL & HORA</span>
-            <div class="info-content">Na Roça (12km) | 09h às 18h</div>
-            <span class="info-title">👙 TRAJE</span>
-            <div class="info-content">Traga seu traje de banho.</div>
+            <div class="info-content">Meu Quintal | Horário: 11h</div>
 
             <div class="confirm-area">
                 <input type="text" id="guest" placeholder="DIGITE SEU NOME">
                 <div class="btn-group">
+                    <button class="btn" id="btn-gps" onclick="abrirGps(event)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                        GPS
+                    </button>
+
+                    <button class="btn" id="btn-fotos-local" onclick="abrirFotosLocal(event)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                        FOTOS DO LOCAL
+                    </button>
+
                     <button class="btn" id="btn-spotify" onclick="window.open('https://open.spotify.com/playlist/05kts8O5ai7kVFmSYLMQS7?si=3aa55864fc344261&pt=e99eb5895fc6bd6b8bd06fe8950a949f', '_blank')">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.494 17.306c-.215.353-.674.464-1.026.249-2.836-1.733-6.406-2.126-10.61-1.168-.403.092-.806-.16-.898-.562-.093-.403.159-.806.562-.898 4.607-1.053 8.547-.604 11.722 1.339.351.214.463.673.25 1.04zm1.465-3.263c-.27.441-.845.58-1.286.31-3.246-1.995-8.196-2.573-12.036-1.407-.496.151-1.022-.128-1.173-.625-.15-.497.129-1.022.625-1.172 4.388-1.332 9.83-.677 13.56 1.614.44.27.58.845.31 1.28zm.136-3.41c-3.894-2.313-10.32-2.525-14.076-1.385-.598.181-1.237-.156-1.418-.754-.182-.598.156-1.237.754-1.418 4.318-1.311 11.416-1.065 15.91 1.604.537.319.715 1.012.396 1.549-.319.537-1.012.715-1.55.397z"/></svg>
                         ADICIONE 10 MÚSICAS AQUI
@@ -197,30 +199,61 @@
         const progFill = document.getElementById('prog-bar');
         const progTxt = document.getElementById('prog-txt');
 
-        // Mapeamento real dos arquivos do seu print
-        const imagens = [
-            'f1.jpg', 'f2.jpg', 'f3.jpg', 'f4.jpg', 'f5.jpg', 'f6.jpg', 'f7.jpg', 
-            'f8.jpg', 'f9.jpg', 'f10.jpg', 'f11.jpg', 'f12.jpg', 'f13.jpg', 
-            'f14.jpg', 'f15.jpg', 'f16.jpg', 'dsd.jpg', 'pet.jpg', '274.jpg', 'fri.jpg'
-        ];
-        
-        let i = 0;
         let escalaSim = 1;
         let escalaNao = 1;
 
-        // CLIQUE MESTRE: Gira o card E troca a foto nas duas camadas
         card.addEventListener('click', function(e) {
             if (e.target.tagName === 'INPUT' || e.target.classList.contains('btn')) return;
-            
-            // Gira
             this.classList.toggle('is-flipped');
-            
-            // Troca Foto
-            i = (i + 1) % imagens.length;
-            const novaImg = `url('${imagens[i]}')`;
-            bgBlur.style.backgroundImage = novaImg;
-            bgSharp.style.backgroundImage = novaImg;
         });
+
+        function abrirGps(e) {
+            e.stopPropagation();
+            window.open('https://www.google.com/maps/place/Tv.+Raul+Braga,+23+-+S%C3%A3o+Francisco,+Xique-Xique+-+BA,+47400-250/@-10.8247901,-42.7218055,3a,75y,353.43h,83.13t/data=!3m7!1e1!3m5!1sCZJ5Lyy5KtWbj8T1jrVK2g!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D6.865084631924901%26panoid%3DCZJ5Lyy5KtWbj8T1jrVK2g%26yaw%3D353.4302631654832!7i16384!8i8192!4m10!1m2!2m1!1srua+alberto+gomes+sampaio,23+travessa+raul+braga+xique+xique+ba!3m6!1s0x76592135251055b:0x3b7087a1e7e4fbf0!8m2!3d-10.8247509!4d-42.7217879!15sCj9ydWEgYWxiZXJ0byBnb21lcyBzYW1wYWlvLDIzIHRyYXZlc3NhIHJhdWwgYnJhZ2EgeGlxdWUgeGlxdWUgYmGSARBnZW9jb2RlZF9hZGRyZXNz4AEA!16s%2Fg%2F11x05p3rxr?authuser=0&entry=ttu&g_ep=EgoyMDI2MDUxMy4wIKXMDSoASAFQAw%3D%3D', '_blank');
+        }
+
+        // Nova função: Abre uma nova aba contendo apenas a galeria de imagens sequencial do espaço
+        function abrirFotosLocal(e) {
+            e.stopPropagation();
+            const imagensHTML = `
+                <html>
+                <head>
+                    <title>Fotos do Local</title>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <style>
+                        body { margin:0; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; font-family:sans-serif; color:#fff; }
+                        .gallery { width:90%; max-width:600px; text-align:center; }
+                        img { width:100%; border-radius:15px; border:2px solid #d4af37; box-shadow:0 0 20px rgba(212,175,55,0.4); margin-bottom:15px; display:none; }
+                        img.active { display:block; }
+                        .nav-btn { background:#d4af37; color:#000; border:none; padding:12px 25px; font-weight:bold; border-radius:8px; cursor:pointer; text-transform:uppercase; margin:5px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="gallery">
+                        <img src="localizaçao.jpeg" class="active">
+                        <img src="espaço1.jpeg">
+                        <img src="espaço2.jpeg">
+                        <div>
+                            <button class="nav-btn" onclick="mudar(-1)">Anterior</button>
+                            <button class="nav-btn" onclick="mudar(1)">Próxima</button>
+                        </div>
+                    </div>
+                    <script>
+                        let idx = 0;
+                        const imgs = document.querySelectorAll('img');
+                        function mudar(dir) {
+                            imgs[idx].classList.remove('active');
+                            idx = (idx + dir + imgs.length) % imgs.length;
+                            imgs[idx].classList.add('active');
+                        }
+                    <\/script>
+                </body>
+                </html>
+            `;
+            const novaJanela = window.open();
+            novaJanela.document.write(imagensHTML);
+            novaJanela.document.close();
+        }
 
         function rejeitar(e) {
             e.stopPropagation();
@@ -251,6 +284,9 @@
             const pFloor = Math.floor(percent);
             progFill.style.width = pFloor + '%';
             progTxt.innerText = `DEPLOYING ALINE... ${pFloor}%`;
+            
+            bgBlur.style.backgroundImage = "url('f11.jpg')";
+            bgSharp.style.backgroundImage = "url('f11.jpg')";
         };
     </script>
 </body>
